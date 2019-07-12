@@ -2,6 +2,29 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
+const cards = document.querySelector('.cards')
+const users = [
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell',
+]
+
+users.forEach(user => {
+  axios.get(`https://api.github.com/users/${user}`)
+ .then(data => {
+    console.log(data.data)
+    cards.appendChild(createCard(data))
+ })
+ .catch(error => {
+   console.log(`error: ${error}`)
+ })
+  
+})
+
+
+
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -13,6 +36,10 @@
 /* Step 4: Pass the data received from Github into your function, 
            create a new component and add it to the DOM as a child of .cards
 */
+
+
+
+
 
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
@@ -43,8 +70,48 @@ const followersArray = [];
     <p>Bio: {users bio}</p>
   </div>
 </div>
-
 */
+
+function createCard(data){
+  let card = document.createElement('div')
+  let image = document.createElement('img')
+  let cardInfo = document.createElement('div')
+  let name = document.createElement('h3')
+  let username = document.createElement('p')
+  let location = document.createElement('p')
+  let profile = document.createElement('p')
+  let profileLink = document.createElement('a')
+  let followers = document.createElement('p')
+  let following = document.createElement('p')
+  let bio = document.createElement('p')
+
+  card.appendChild(image)
+  card.appendChild(cardInfo)
+  cardInfo.appendChild(name)
+  cardInfo.appendChild(username)
+  cardInfo.appendChild(location)
+  cardInfo.appendChild(profile)
+  cardInfo.appendChild(profileLink)
+  cardInfo.appendChild(followers)
+  cardInfo.appendChild(following)
+  cardInfo.appendChild(bio)
+
+  card.classList.add('card')
+  cardInfo.classList.add('card-info')
+  name.classList.add('name')
+  username.classList.add('username')
+
+  image.src = data.data.avatar_url
+  name.textContent = data.data.name
+  username.textContent = data.data.login
+  location.textContent = data.data.location
+  profileLink.href = data.data.html_url
+  followers.textContent = `Followers: ${data.data.followers}`
+  following.textContent = `Following: ${data.data.following}`
+
+  return card
+
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
